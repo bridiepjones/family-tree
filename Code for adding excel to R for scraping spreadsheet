@@ -1,0 +1,46 @@
+//you need to convert excel to CSV first or save as "csv" //
+df = read.table("family.csv", header = TRUE) // replace family.csv with your filename
+
+Copy and paste from Excel to R
+
+df = read.table("clipboard")
+
+Add ODBC connection
+
+require(RODBC)
+conn = odbcConnectExcel("family.xlsx") # open a connection to the Excel file
+sqlTables(conn)$TABLE_NAME # show all sheets
+df = sqlFetch(conn, "Sheet1") # read a sheet
+df = sqlQuery(conn, "select * from [Sheet1 $]") # read a sheet (alternative SQL sintax)
+close(conn) # close the connection to the file
+
+RSPLUS
+
+require(gdata)
+df = read.xls ("family.xlsx"), sheet = 1, header = TRUE)
+
+xlsReadWrite package (windows only)
+
+require(xlsReadWrite)
+xls.getshlib()
+df = read.xls("family.xls", sheet = 1)
+
+XLConnect package (java based)
+
+require(XLConnect)
+wb = loadWorkbook("myfile.xlsx")
+df = readWorksheet(wb, sheet = "Sheet1", header = TRUE)
+
+require(xlsx)
+coln = function(x) { # A function to see column numbers
+  y = rbind(seq(1, ncol(x)))
+  colnames(y) = colnames(x)
+  rownames(y) = "col.number"
+  return(y)
+}
+data = read.xlsx2("myfile.xlsx", 1) # open the file 
+coln(data) # check the column numbers you want to have as factors
+x = 3 # Say you want columns 1-3 as factors, the rest numeric
+data = read.xlsx2("myfile.xlsx", 1, 
+  colClasses = c(rep("character", x), rep("numeric", ncol(data)-x+1))
+)
