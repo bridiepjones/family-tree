@@ -1,0 +1,22 @@
+REMOVE DUPLICATE COLUMNS
+
+a <- c(rep("A", 3), rep("B", 3), rep("C",2))
+b <- c(1,1,2,4,1,1,2,2)
+df <-data.frame(a,b)
+
+duplicated(df)
+[1] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE
+
+> df[duplicated(df), ]
+  a b
+2 A 1
+6 B 1
+8 C 2
+
+> df[!duplicated(df), ]
+  a b
+1 A 1
+3 A 2
+4 B 4
+5 B 1
+7 C 2
